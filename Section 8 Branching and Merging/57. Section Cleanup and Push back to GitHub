@@ -1,0 +1,21 @@
+Hemos llegado al final del branching y merging (ramificación y fusión).
+Por lo que vamos a limpiar el directorio de trabajo y enviar los cambios a Github.
+
+Rama master
+++++++++++++
+git status: Podemos ver el directorio de trabajo limpio con algunos commits por delante
+
+git branch: Listamos las ramas y vemos que sólo tenemos la rama master
+
+git pull origin master:  Debe hacerse antes del push y vemos que tenemos todo actualizado.
+
+git push origin master: Ahora hacemos el push(empujamos) los cambios hacia el directorio remoto(Github)
+
+
+Por último nos vamos a Github:
++++++++++++++++++++++++++++++++
+
+Refrescamos el repositorio y podemos ver el último commit .gitignore
+para excluir los archivos temporales
+
+Si miras bien puedes ver todos los cambios

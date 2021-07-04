@@ -1,0 +1,147 @@
+++++++++++++++++++++++++++++++++++++++++
+Happy Path / Disable Fast Forward Merges
+++++++++++++++++++++++++++++++++++++++++++++
+
+https://chercher.tech/git/git-branching-merging#disable-fast-forward
+
+Sabemos cómo hacer una combinación de avance rápido en Git, ahora, 
+Comprendamos cómo deshabilitar la combinación de avance rápido en Git y siga las instrucciones a continuación
+
+1)Añadimos comentario al file simple.html y hacemos el commit
+
+Agreguemos un aviso de derechos de autor al comienzo del archivo "simple.html
+
+Añadimos un comentario HTML rápido para agregar un aviso de derechos de autor.
+
+vi simple.html
+
+<!DOCTYPE html>
+
+<!--
+Copyright 2014 Git.Training
+
+-->
+
+Guardamos y cerramos el archivo simple.html
+
+
+$ git status
+On branch add-copyright
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   simple.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (add-copyright)
+$ git commit -am "Adding copyright notice"
+[add-copyright a007d9d] Adding copyright notice
+ 1 file changed, 4 insertions(+)
+
+
+2)Añadimos comentario al file README y hacemos el commit
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (add-copyright)
+
+$ vi README.md
+
+##Copyright
+
+2014 Git.Training.
+
+$ git status
+On branch add-copyright
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (add-copyright)
+
+$ git commit -am "Adding copyright notice to README"
+[add-copyright 91edef8] Adding copyright notice to README
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+YA TENEMOS LOS " COMMITS QUE FORMAN PARTE DE ESTA RAMA
+
+
+3) Ver los 2 commits que forman parte de la rama add-copyright
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (add-copyright)
+
+$ git log --oneline --graph --decorate
+* 91edef8 (HEAD -> add-copyright) Adding copyright notice to README
+* a007d9d Adding copyright notice
+
+4) Vamos a integrar(mergear) los 2 cambios a la rama Master
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+1) Nos cambios a la rama Master
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (add-copyright)
+$ git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+
+2) Realizamos el merge con git merge add-copyright --no-ff
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$git merge add-copyright --no-ff
+
+hint: Waiting for your editor to close the file...
+
+  Nos salta el editor con el siguiente mensaje:
+
+  Merge branch 'add-copyright'
+  # Please enter a commit message to explain why this merge is necessary,
+  # especially if it merges an updated upstream into a topic branch.
+  #
+  # Lines starting with '#' will be ignored, and an empty message aborts
+  # the commit.
+
+Guardams y cerramos y vemos que los cambios se mergean:
+-------------------------------------------------------
+
+$ git merge add-copyright --no-ff
+Merge made by the 'recursive' strategy.
+ README.md   | 6 +++++-
+ simple.html | 4 ++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+Comprobamos los commits mergeados
+++++++++++++++++++++++++++++++++++ 
+
+$ git log --oneline --graph --decorate --all
+*   9b0894f (HEAD -> master) Merge branch 'add-copyright'
+|\
+| * 91edef8 (add-copyright) Adding copyright notice to README
+| * a007d9d Adding copyright notice
+|/
+
+Borramos la rama add-copyright
+++++++++++++++++++++++++++++++++++++++++++
+Ahora que hemos integrado los cambios ,Nosotros podemos borrar la rama
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+
+$ git branch -d add-copyright
+Deleted branch add-copyright (was 91edef8).
+
+La ramificación aún ocurre
++++++++++++++++++++++++++++
+Si volvemos a mostrar nuestro registro de commit,podemos observar que no tenemos
+esas etiquetas asociadas cuando nos ramificamos ; la ramificación auún ocurre.
+Simplemente o tenemos un label(etiqueta asociada)
+$ git log --oneline --graph --decorate --all
+*   9b0894f (HEAD -> master) Merge branch 'add-copyright'
+|\
+| * 91edef8 Adding copyright notice to README
+| * a007d9d Adding copyright notice
+|/

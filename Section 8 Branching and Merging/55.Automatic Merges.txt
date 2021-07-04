@@ -1,0 +1,239 @@
+++++++++++++++++++++++++++++++++++++++++
+55. Automatic Merges
+++++++++++++++++++++++++++++++++++++++++++++
+
+https://chercher.tech/git/git-branching-merging#automatic-merge
+
+
+Git nos dice que estamos en la rama maestra con un directorio de trabajo limpio
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+Vemos las ramas y la actual activa
+++++++++++++++++++++++++++++++++++++
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+  branch
+* master
+  title-change
+  
+  ++++++++++++++++++++
+  Rama simple-changes
+  ++++++++++++++++++++
+  
+   Creamos la rama llamada "simple-changes" y nos cambiamos a ella directamente
+   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   
+   jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+   $ git checkout -b simple-changes
+   Switched to a new branch 'simple-changes'
+   
+   En la rama simple-changes editamos el file humans.txt e introducimos texto
+   ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (simple-changes)
+    $ vi humans.txt
+	
+   Hacemos el commit del file humans.txt en la rama simple-changes
+   +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (simple-changes)
+    $ git status
+    On branch simple-changes
+    Changes not staged for commit:
+      (use "git add <file>..." to update what will be committed)
+      (use "git restore <file>..." to discard changes in working directory)
+            modified:   humans.txt
+    
+    no changes added to commit (use "git add" and/or "git commit -a")
+    
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (simple-changes)
+    $ git commit -am "Adding team member to humans.txt"
+    [simple-changes 9fc8e73] Adding team member to humans.txt
+     1 file changed, 2 insertions(+), 2 deletions(-)
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (simple-changes)
+    $ git status
+    On branch simple-changes
+    nothing to commit, working tree clean
+	
+++++++++++++++++++++
+Rama master
+++++++++++++++++++++	
+
+Nos cambiamos a la rama master
++++++++++++++++++++++++++++++++
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (simple-changes)
+$ git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+
+Mientras estamos en la rama maestra voy a realizar un cambio sobre el file README.md
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Este cambio lo podría hacer un desarrollador
+para arreglar algo de producción o para añadir algo
+
+  
+  Editamos el README.md y hacemos el cambio
+  +++++++++++++++++++++++++++++++++++++++++
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ vi README.md
+  
+  Vemos con git status que tenemos un cambio
+  +++++++++++++++++++++++++++++++++++++++++++
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ git status
+  On branch master
+  Your branch is up to date with 'origin/master'.
+  
+  Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git restore <file>..." to discard changes in working directory)
+          modified:   README.md
+  
+  no changes added to commit (use "git add" and/or "git commit -a")
+
+  Realizamos el commit sobre la rama master
+  ++++++++++++++++++++++++++++++++++++++++++++++
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ git commit -am "Adding instructions on how to contribute"
+  [master 91e4b82] Adding instructions on how to contribute
+   1 file changed, 4 insertions(+)
+
++++++++++++++++++++++
+MERGEANDO LOS CAMBIOS
+++++++++++++++++++++++
+
+Tenemos commits en la Rama "master" y en la Rama "simple-changes"
+
+
+Observamos los cambios que tenemos en el Repo(proyecto)
+
+git log --oneline --graph --decorate --all
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git log --oneline --graph --decorate --all
+* 91e4b82 (HEAD -> master) Adding instructions on how to contribute  # commit(91e4b82) sobre la Rama "master"
+| * 9fc8e73 (simple-changes) Adding team member to humans.txt        # commit(9fc8e73) sobre la Rama "simple-changes"
+
+
+Estamos en la  Rama "master"
+++++++++++++++++++++++++++++
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+  branch
+* master
+  simple-changes
+  title-change
+
+Mergeamos(Fusionamos) los cambios de Rama "simple-changes"
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  Nos colocamos en la Rama "master" para hacer el merge
+  -------------------------------------------------------
+  
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  
+  $ git merge simple-changes -m "Merging changes from simple-changes branch"
+  Merge made by the 'recursive' strategy.
+   humans.txt | 4 ++--
+   1 file changed, 2 insertions(+), 2 deletions(-)
+   
+   El parametro -m nos da como resultado el mensaje de confirmación
+   " " Lo que hay entre comillas dobles es el mensaje de confirmación
+
+Revisamos que se ha producido el merge(fusión)
+---------------------------------------------
+
+
+Observamos:
+
+Que sea producido el merge(la fusión) y vemos tb el mensaje de confirmación.
+Pero los cambios de la Rama simple-changes aun se conservan como una rama separada
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git log --oneline --graph --decorate --all
+*   27e9d94 (HEAD -> master) Merging changes from simple-changes branch
+|\
+| * 9fc8e73 (simple-changes) Adding team member to humans.txt
+* | 91e4b82 Adding instructions on how to contribute
+|/
+
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+  branch
+* master
+  simple-changes
+  title-change
+
+Borrando la Rama simple-changes
+++++++++++++++++++++++++++++++++
+
+Hemos acabado con la Rama simple-changes y podemos borrarla
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch -d simple-changes
+Deleted branch simple-changes (was 9fc8e73).
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git log --oneline --graph --decorate --all
+*   27e9d94 (HEAD -> master) Merging changes from simple-changes branch
+|\
+| * 9fc8e73 Adding team member to humans.txt
+* | 91e4b82 Adding instructions on how to contribute
+|/
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+  branch
+* master
+  title-change
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+MERGEADO CORRECTO(FUSIONADO)
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Ver que el mergeado de ambas ramas está correcto:
+
+Ver que los commits ambas ramas se han fusionado en la Rama Master.
+
+
+Ver en la rama master que los cambios están mergeados(fusionados)
+
+ humans.txt: Rama simple-changes
+ README.md:  Rama master
+ 
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+
+$ vi humans.txt
+      
+ # TEAM
+
+    Jesús Sanguino jsnl@gft.com
+	
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ vi README.md
+
+## How To Contribute
+
+Please fork this repository and then issue Pull Request for review.
+
+
+
+
+ 
+ 

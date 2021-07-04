@@ -1,0 +1,375 @@
+En esta sección voy a cubrir cómo resolver conflictos de fusión.
+
+La mayoría de las veces, terminaremos haciendo "Fast Forward merges", o merges que podrían resultar en Fast Forwards
+o, de lo contrario, Git realizará merge automatically  se fusionará automáticamente.
+
+Sin embargo, a veces nos encontraremos con los conflictos y tendremos que resolverlos. Ahora sigamos como se muestra a continuación.
+
++++++++++++++++++++++++
+REPOSITORIO starter-web
+++++++++++++++++++++++++
+
++++++++++++
+Rama master
++++++++++++
+  jsnl@ESPC006827 MINGW64 ~/projects
+  $ cd starter-web/
+  
+  Tenemos un repositorio limpio con varios commits por delante del repositorio Remoto de GitHub
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ git status
+  On branch master
+  Your branch is ahead of 'origin/master' by 3 commits.
+    (use "git push" to publish your local commits)
+  
+  nothing to commit, working tree clean
+  
+  Listamos las ramas locales
+  ++++++++++++++++++++++++++++
+  Vemos que sólo tenemos una rama local la rama master 
+  
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ git branch
+  * master
+  
+  Creamos otra rama "realwork" para el Repo starter-web
+  +++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+  Vemos como se crea la rama realwork y se cambia directamente a la misma:
+  
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ git checkout -b realwork
+  Switched to a new branch 'realwork'
+  
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (realwork)
+  
+  ++++++++++++++++++++++
+  Sobre la Rama realwork
+  +++++++++++++++++++++++
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (realwork)
+  
+  Editamos el file simple.html y realizamos algunos cambios y realizamos el commit para los cambios.
+  
+  
+  Editamos simple.html
+  ---------------------
+  Y actualizamos(cambiamos) en la la sección copyright lo siguiente:
+  
+  
+  <head>
+          <title>An example Website</title>
+         
+  </head>
+  <body>
+                  <p>
+                          Just some content
+                  </p>
+          </main>
+          <footer class="container">
+                  <p>&copy; Company 2014</p>
+          </footer>
+  </body>
+  ---------------------------------------------
+  <head>
+          <title>An great Website</title>
+  </head>		
+  <body>
+                  <p>
+                          Some interesting stuff goes here
+                  </p>
+          <footer class="container">
+                  <p>&copy; Git Training 2014</p>
+          </footer>
+  </body>
+  
+  Realizamos el commit
+  ------------------
+  
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (realwork)
+  $ git commit  -am "rama realwork simple.html changes"
+  [realwork 18c6cf3] rama realwork simple.html changes
+   1 file changed, 2 insertions(+), 2 deletions(-)
+   
+   jsnl@ESPC006827 MINGW64 ~/projects/starter-web (realwork)
+  $ git status
+  On branch realwork
+  nothing to commit, working tree clean
+  
+
+CREANDO CONFLICTOS ENTRE LAS RAMAS
++++++++++++++++++++++++++++++++++++++
+Vamos a realizar algunos cambios adicionales que crearán conflictos sobre el file simple.html
+
+Rama Master
+------------
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ vi simple.html
+
+<title>A very powerful website</title>
+<p>I´m not sure what will go here,but I´m sure it will e nice</p>
+<p>&copy; Jason Taylor 2014</p>
+
+Estos deberían dar conflicto con los otros cambios que hice en la otra rama
+
+  <head>
+          <title>A very powerful website</title>
+         
+  </head>
+  <body>
+                  <p>
+                          I´m not sure what will go here,but I´m sure
+						  it will be nice
+                  </p>
+          </main>
+          <footer class="container">
+                  <p>&copy; Jason Taylor 2014</p>
+          </footer>
+  </body>
+
+  Vemos el estado del repo starter-web
+  -------------------------------------
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)  
+  $ git status
+  On branch master
+  Your branch is up to date with 'origin/master'.
+  
+  Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git restore <file>..." to discard changes in working directory)
+          modified:   simple.html
+  
+  no changes added to commit (use "git add" and/or "git commit -a") 
+  
+  Realizamos el commit directamnete
+  ----------------------------------
+  
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ git commit -am "Adding conflicting changes (on purpose) for Git example. I hope this works!"
+  [master 99b86c5] Adding conflicting changes (on purpose) for Git example. I hope this works!
+   1 file changed, 4 insertions(+), 3 deletions(-)
+   
+  Vemos que el commit se ha realizado
+  ------------------------------------
+  jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+  $ git status
+  On branch master
+  Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+  
+  ++++++++++++++++++++++++++++++
+  Ver los commits cambios entre las ramas
+  +++++++++++++++++++++++++++++++
+  
+  Podemos observar que nuestro trabajo ha divergido
+  que los commits entre la rama master y realwork con diferentes commit(cambios)
+  
+  
+  $ git log --oneline --graph --decorate --all
+  
+  * 99b86c5 (HEAD -> master) Adding conflicting changes (on purpose) for Git example. I hope this works!
+  * d29f382 (origin/master, origin/HEAD) rama master simple.html
+  | * 18c6cf3 (realwork) rama realwork simple.html changes
+  | * 12d80a7 rama realwork simple.html change
+  |/
+  *   27e9d94 Merging changes from simple-changes branch
+  
+Comparando las 2 ramas
++++++++++++++++++++++++
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+
+Comparando en modo texto las 2 ramas: Ver las diferencias
+----------------------------------------------------------
+
+$ git diff master realwork
+ 
+diff --git a/simple.html b/simple.html
+index 30728bb..5743b18 100644
+--- a/simple.html
++++ b/simple.html
+@@ -4,7 +4,7 @@ Copyright 2014 Git.Training
+
+ -->
+ <head>
+-       <title>A very powerful website</title>
++       <title>An great Website</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+                body {
+@@ -18,12 +18,11 @@ Copyright 2014 Git.Training
+        <main class="container">
+        <!-- Content Goes Here -->
+                <p>
+-                       I´m not sure what will go here,but I´m sure
+-                       it will be nice
++                       Some interesting stuff goes here
+                </p>
+        </main>
+        <footer class="container">
+-               <p>&copy; Jason Taylor 2014</p>
++               <p>&copy; Git Training 2014 </p>
+        </footer>
+ </body>
+  
+Comparando en modo visual las 2 ramas: Ver las diferencias
+----------------------------------------------------------
+
+Hay que tener instalado el SW P4Merge
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git difftool master realwork  ->>>> Se lanza el program diftool visualmente
+
+VAMOS A INTENTAR LANZAR EL MERGE
+++++++++++++++++++++++++++++++++
+
+Al intentar lanzar el merge(fusionar ambas ramas) nos da error:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+
+$ git merge realwork
+Auto-merging simple.html
+CONFLICT (content): Merge conflict in simple.html
+Automatic merge failed; fix conflicts and then commit the result.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master|MERGING)
+
+Cosas a observar:
+
+Git intento hacer un Auto-merging de simple.html
+No pudo y el resultado es un CONFLICTO en el Contenido
+el Automatic merge fallo, Así que debemos solucionar los conflictos(las diferencias)
+
+(master|MERGING)->>>Esto nos indica que estamos fusionando contra la Rama Master y estamos en un MERGING state.
+
+No tenemos un working directory limpio o stagging area;Nosotros sólo estamos in-between statte of merging
+
+
+Observamos que tenemos el file simple.html
+------------------------------------------
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master|MERGING)
+$ ls -al | grep simple.html
+-rw-r--r-- 1 jsnl 1049089   766 Jul  2 13:10 simple.html
+
+
+Abrimos el simple.html en este estado
+------------------------------------------
+
+Reconoceremos las diferencias si estamos familirizados con otras tools de control de código 
+que son populares en Linux o en la Comunidad de Linux
+al abrir el archivo simple.html
+
+Será un poco desagradable, pero Git modificará su archivo mostrando las diferencias.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master|MERGING)
+$ vi simple.html
+
+<<<<<<< HEAD
+        <title>A very powerful website</title>
+=======
+        <title>An great Website</title>
+>>>>>>> realwork
+
+
+Vamos a modificar los archivos manualmente
+----------------------------------------
+Antes configuramos las herramientas visuales diff y mergetools para poder hacer esto con una herramienta gráfica.
+Vamos a invocar nuestra herramienta gráfica, para ayudar a resolver nuestro Merge conflict (conflicto de fusión),
+escriba git mergetool , y eso iniciará el p4merge.
+P4Merge es una herramienta de fusión de tres vías bastante agradable,
+que podemos usar para resolver los conflictos.
+
+$ git mergetool
+Merging:
+simple.html
+
+Normal merge conflict for 'simple.html':
+  {local}: modified file
+  {remote}: modified file
+
+
+Una vez que hemos resuelto los conglictos de fusión(merge) guardamos el archivo y salimos.
+
+Realizamos el commiteado
+-------------------------
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master|MERGING)
+$ git commit -m "Done resolving the merge conflicts"
+[master 7b37542] Done resolving the merge conflicts
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 4 commits.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        simple.html.orig
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+Usando .gitignore para exluir los archivos temporales del merge
+----------------------------------------------------------------
+Hemos observado con "git status" que tenemos un file (simple.html.orig) sin seguimiento.
+Eso es debido a que durante la reolución del mergeado Git guarda una copia original de los conflictos 
+del mergeado.
+De modo que si algo se pierde ,podemos revertir estos cambios.
+
+Sin embargo No queremos rastrear archivos .orig por lo que voy agregar esto a mi lista de ignorados.
+Edito el .gitignore y meto esto allí,salvamos y guardamos.
+
+ $ cat .gitignore
+ *.origin
+
+ jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+ $ git add .gitignore
+
+ jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git commit -m "updating ignore file to exclude merge temp files"
+[master 54b9c2e] updating ignore file to exclude merge temp files
+ 1 file changed, 1 insertion(+)
+ create mode 100644 .gitignore
+
+Borrando la rama realwork después del mergeado de las ramas
+------------------------------------------------------------
+Puesto que ya he realizado el mergeado de las ramas ya puedo borrar la rama realwork:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+* master
+  realwork
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch -d realwork
+Deleted branch realwork (was 18c6cf3).
+
+
+Podemos ver que el "Done resolving merge conflicts" is my merge commit, 
+
+seguido del último commit "updating ignore file to exclude merge temp files",
+el cual yo necesite para actualizar el archivo ignore para poder exluir los archivos temporales
+del mergeado.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git log --oneline --graph --decorate --all
+* 54b9c2e (HEAD -> master) updating ignore file to exclude merge temp files
+*   7b37542 Done resolving the merge conflicts
+|\
+| * 18c6cf3 rama realwork simple.html changes
+| * 12d80a7 rama realwork simple.html change
+* | 99b86c5 Adding conflicting changes (on purpose) for Git example. I hope this works!
+* | d29f382 (origin/master, origin/HEAD) rama master simple.html
+|/
+*   27e9d94 Merging changes from simple-changes branch
+
+
+
+
+
+
+
+  
