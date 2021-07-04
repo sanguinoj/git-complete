@@ -1,0 +1,26 @@
+Rebasing es una solución alternativa para la fusión
+donde el rebase difiere al reescribir el historial de confirmaciones 
+para producir una sucesión lineal y directa de las confirmaciones.
+
+Cuando rebasas, Git encuentra la base de tu rama y encuentra todas las confirmaciones
+entre el Jefe y la Base y reproduce esas confirmaciones empujándolas hacia atrás.
+
+Ahora, comprendamos paso a paso cómo funcionará Rebase,
+siga los pasos que se indican a continuación. 
+Aquí estoy trabajando con mi repositorio de Git llamado starter-web,
+que he bifurcado de scm-ninja/starter-web
+
+Vayamos a la terminal de Git Bash,
+así que estoy en la carpeta de mi proyecto y 
+ahora estoy cambiando a mis repositorios de git 
+funcionando directorio cd starter-web-1, si lo hace ls, 
+puede ver la cantidad de archivos que forman parte de este proyecto.
+
+
+Si lo hace git status, puede ver que estamos en el directorio de trabajo limpio.
+
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Y si también verificas la rama git branch, aquí solo tenemos nuestro rama master.
