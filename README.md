@@ -1,4 +1,5 @@
-# git-complete-------------------------------------------------------------
+# git-complete
+
 Git Complete: The definitive, step-by-step guide to Git
 -------------------------------------------------------------
 https://www.udemy.com/course/git-complete/
