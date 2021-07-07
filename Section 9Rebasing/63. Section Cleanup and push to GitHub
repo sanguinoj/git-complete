@@ -1,0 +1,92 @@
+
+Hemos llegado al final de la sección de rebase.
+
+Vamos a hacer solo un poco de limpieza; así que si haces un "pwd",
+
+git status
+ ---------------------------------------------
+Vemos en el directorio de trabajo de nuestro repositorio Git.
+
+Ejecutamos "git status" nos dice que:
+
+-estamos en la rama master.
+
+-Tenemos un directorio de trabajo limpio, pero estamos un compromis por delante del origin master:
+
+    $ git status
+    On branch master
+    Your branch is ahead of 'origin/master' by 1 commit.
+   (use "git push" to publish your local commits)
+    nothing to commit, working tree clean
+
+git branch
+ ---------------------------------------------
+Si hacemos una "git branch", vemos que todavía tenemos nuestro
+
+rama "bigtrouble" por ahí, y definitivamente ya no la necesitamos.
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+    $ git branch
+      bigtrouble
+    * master
+
+
+Borando la rama "bigtrouble"
+---------------------------------------------
+Entonces, lo primero que quiero hacer es continuar y eliminar esa rama;
+
+bien, entonces "git branch -d", para borrar, y luego el nombre de la rama "bigtrouble".
+
+    $ git branch -d bigtrouble
+    Deleted branch bigtrouble (was 0869000).
+
+Confirmanos qu se ha borado la rama "bigtrouble"
+----------------------------------
+"git branch" confirma que hemos eliminado esa rama.
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+    $ git branch
+    * master
+
+
+
+git pull 
+----------------------------------
+Muy bien, entonces el siguiente paso es sincronizar con GitHub.
+
+Así que quiero hacer un "git pull origin master", y todos estamos actualizados.
+
+Entonces, aunque hay una confirmación diferente en GitHub de la local,
+
+ya hemos incorporado esos cambios mediante el comando "rebase" en una demostración anterior. 
+
+    $ git pull origin master
+    From https://github.com/sanguinoj/starter-web
+     * branch            master     -> FETCH_HEAD
+    Already up to date.
+
+git push
+----------------------------------
+Sigamos adelante y procedamos con nuestro "git push".
+
+Muy bien, hemos subido todos nuestros cambios a GItHub, vamos a verlo.
+
+Muy bien, "actualizando simple.html aviso de derechos de autor", que se originó en nuestro repositorio local.
+
+    $ git push
+    Enumerating objects: 5, done.
+    Counting objects: 100% (5/5), done.
+    Delta compression using up to 4 threads 
+    Compressing objects: 100% (3/3), done.
+    Writing objects: 100% (3/3), 347 bytes | 347.00 KiB/s, done.
+    Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
+    remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+    To https://github.com/sanguinoj/starter-web.git
+    7434464..089b0a1  master -> master
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean

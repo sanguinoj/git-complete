@@ -1,0 +1,180 @@
+Actualizando nuestro git remoto con git local
++++++++++++++++++++++++++++++++++++++++++++++
+
+-Partimos de un working directory limpio 
+Pero tenemos 7 comits por delante del repo remoto:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 7 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+-Veamos nuestros repos tanto locales como remotos:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch -a
+  bigtrouble
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/master
+
+-Voy a sincronizar los cambios que hay en la repo remoto hacia mi repo local:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git pull origin master
+From https://github.com/sanguinoj/starter-web
+ * branch            master     -> FETCH_HEAD
+Already up to date.
+
+-Ahora pushareamos loca cambios hacia el git remoto que tenemos en nuestro repo local:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git push origin master
+Enumerating objects: 25, done.
+Counting objects: 100% (25/25), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (21/21), done.
+Writing objects: 100% (21/21), 2.18 KiB | 446.00 KiB/s, done.
+Total 21 (delta 14), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (14/14), completed with 4 local objects.
+To https://github.com/sanguinoj/starter-web.git
+   54b9c2e..0869000  master -> master
+
+-Ahora nuestro estado nos dice que nuestra rama local(master)
+ esta actualizada con la rama remota
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+2 ejemplo
+++++++++++++++++++++++++++++++++++++++++++++++
+
+En este ejemplo, quiero mostrar cómo reajustar los cambios entrantes
+
+de GitHub a su repositorio local.
+
+Editamos el file simple.html
+ ---------------------------------------------
+Para demostrar eso, hagamos algunos cambios primero:
+
+Voy a editar el archivo "simple.html",cambiamos el aviso de derechos de autor,
+vamos a poner "2014 Git.Training,All rights reserved" y guardamos y cerramos.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ vi simple.html
+
+Comiteamos el cambio del file simmple.html
+---------------------------------------------
+Hacemos el ·express comit" de la siguinete manera: git commit -am "local:updating simple.html copyright notice"
+
+$ git commit -am "local:updating simple.html copyright notice"
+[master 98162f1] updating simple.html copyright notice
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-Volvemos a tener un working directoy limpio con 1 comit por delante de la rama remota "origin/master"
+ tal y como podemos ver con el git status :
+
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+
+Repo remoto: Modificamos index.html
+-----------------------
+
+rincipalmente hacemos esto para mostrar cómo sería esto si hubiera otro desarrollador contribuyendo en GitHub mientras trabajamos en nuestro repositorio local.
+
+En el repo remoto https://github.com/sanguinoj/starter-web/ modificamos index.html:
+
+ Nos vamos GitHub desde el navegador, y modifiquemos el "index.html". 
+
+ https://github.com/sanguinoj/starter-web/blob/master/index.html
+
+ Ponemos lo siguiente en el index.html:
+ <button type="submit" class="login">Sign in</button>
+
+ Hacemos el comit con el siguiente mensaje y le damos a Commit changes:
+
+ "remote: minor change to index.html file"
+
+ Esto quedaría reflejado en Github.
+
+-Si hacemos un "git status" nos muestra que mi "rama master" esta un comit desactualizada de la 
+ rama remota "origin/master" 
+
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+-Para sincronizar esto ,en lugar de usar "git pull", voy a usar "git fetch".
+
+ "git fetch" es un comando no destructivo que simplemente actualiza las referencias.
+
+
+$ git fetch origin master
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 2), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), 698 bytes | 12.00 KiB/s, done.
+From https://github.com/sanguinoj/starter-web
+ * branch            master     -> FETCH_HEAD
+   0869000..7434464  master     -> origin/master
+
+Todas las referencias están actualizadas.
+
+-Si hago un git status me dice que mi rama remota ("origin/master") 
+ y mi rama master (local) han divergido:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch and 'origin/master' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+
+  git pull -rebase origin master
+  ----------------------------------------------
+
+  -En este punto vamos a hacer un merge pero no de la manera tradicional
+
+  Prefiero mantener mis comits ,mis cambios por delante de lo que este en Github,
+  pero queremos el beneficio de los cambios que puedan haber ocurido en GitHub.
+
+  Así que para hacer esto introducimos "git pull --rebase origin master".
+
+  $ git pull --rebase origin master
+From https://github.com/sanguinoj/starter-web
+ * branch            master     -> FETCH_HEAD
+Successfully rebased and updated refs/heads/master.
+
+  
+  Es como nuestro comando estandar git pull ,excepto que ahora usamos la opción -rebase
+  para provocar un rebase(reorganización) en vez de un merge (fusión) normal
+
+ Hemos reorganizado (rebase) nuestros cambios de GitHub 
+ en la parte superior de nuestra rama maestra en nuestro repositorio local.
+
+-Si hacemos un "git status":
+
+ Nuestra rama master esta sólo 1 comit por delante de la rama remota(origin/master)
+
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+
+
+

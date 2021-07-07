@@ -1,0 +1,109 @@
+
+Rama master
+++++++++++++
+Retomamos desde donde lo dejamos
+Actualmente estoy en mi repositorio de Git en mi working directory:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ pwd
+/c/Users/jsnl/projects/starter-web
+
+Estoy en la "rama master" con un working directory limpio:
+
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 5 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+
+Rama bigtrouble
+++++++++++++++++
+Tenemos nuestra rama "bigtrouble" que creamos en el último video:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+  bigtrouble
+* master
+
+y voy a cambiar a esa rama. Por lo que actualmente estoy en la "rama bigtrouble":
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git checkout bigtrouble
+Switched to branch 'bigtrouble'
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+
+
+
+
+Comparando visualmente ambas ramas: git difftool
++++++++++++++++++++++++++++++++++++++++++++++++++
+Ejecutamos "git difftool", y luego el nombre de la "primera rama "y luego el nombre de la "segunda rama".
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git difftool master bigtrouble
+
+Entonces se muestra P4Merge, que está configurado como mi visual diff/mergetool,
+
+aparece y me muestra las "diferencias" entre la "rama maestra" y la "rama actual".
+
+Parece que habrá varios conflictos con el archivo "simple.html".
+
+
+Rebase
+++++++++
+Intentamos el rebase. Como se esperaba,el rebase resulto en un conflicto.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git rebase master
+error: could not apply 2151eab... fb Adding some trouble to simple.html
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply 2151eab... fb Adding some trouble to simple.html
+Auto-merging simple.html
+CONFLICT (content): Merge conflict in simple.html
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble|REBASE 1/1)
+
+Abortando el rebase
+++++++++++++++++++++
+Lo primero que quiero mostrar es que podemos "abortar el rebase":
+
+Quizás hemos determinado que esto es demasiado complicado,y preferimos adoptar un enfoque diferente.
+
+Para hacer eso, emitiremos el "git rebase", con el parámetro "--abort":
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble|REBASE 1/1)
+$ git rebase --abort
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+
+
+Así que ahora estamos completamente fuera del rebase.
+
+Si yo hago un "git status",todavía estamos en la "rama bigtrouble",y en un directorio de trabajo limpio.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git status
+On branch bigtrouble
+nothing to commit, working tree clean
+
+Revisando el histórico
+----------------------
+Si hago un "git log --oneline --graph --decorate --all", podemos ver que nada ha cambiado.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git log --oneline --graph --decorate --all
+* 9cdbcca (master) mb conflicting changes brewing
+| * 2151eab (HEAD -> bigtrouble) fb Adding some trouble to simple.html
+|/
+* 9f542e5 mb before rebase conflicts
+
+Aún tenemos las 2 ramas que son divergentes
+
+
+

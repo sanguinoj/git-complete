@@ -1,22 +1,28 @@
-Rebasing es una solución alternativa para la fusión
+
+https://chercher.tech/git/rebasing-in-git
+
+Git rebase básicamente lo que hace 
+es recopilar uno a uno los cambios confirmados en una rama, y reaplicarlos sobre otra.
+
+Rebasing es una solución alternativa al merge.
 donde el rebase difiere al reescribir el historial de confirmaciones 
-para producir una sucesión lineal y directa de las confirmaciones.
+para producir una sucesión lineal y directa de los commits.
 
-Cuando rebasas, Git encuentra la base de tu rama y encuentra todas las confirmaciones
-entre el Jefe y la Base y reproduce esas confirmaciones empujándolas hacia atrás.
+Cuando rebasas, Git encuentra la base de tu rama y encuentra todos los commits
+entre el Head y la Base y reproduce esas confirmaciones empujándolas hacia atrás.
 
-Ahora, comprendamos paso a paso cómo funcionará Rebase,
-siga los pasos que se indican a continuación. 
-Aquí estoy trabajando con mi repositorio de Git llamado starter-web,
-que he bifurcado de scm-ninja/starter-web
+Vamos a comprender paso a paso cómo funciona Rebase.
+Siga los pasos que se indican a continuación. 
+Vamos a trabajar con mi repositorio de Git llamado starter-web 
+que he he forkeado(copiado) desde scm-ninja/starter-web
 
-Vayamos a la terminal de Git Bash,
-así que estoy en la carpeta de mi proyecto y 
-ahora estoy cambiando a mis repositorios de git 
-funcionando directorio cd starter-web-1, si lo hace ls, 
-puede ver la cantidad de archivos que forman parte de este proyecto.
+Vayamos a la terminal de Git Bash en la carpeta de mi proyecto starter-web .
+Si hacemos un ls podemos ver una cantidad de archivos.
 
 
+
+Rama master repositorio starter-web
+++++++++++++++++++++++++++++++++++++
 Si lo hace git status, puede ver que estamos en el directorio de trabajo limpio.
 
 $ git status
@@ -24,3 +30,265 @@ On branch master
 Your branch is up to date with 'origin/master'.
 
 Y si también verificas la rama git branch, aquí solo tenemos nuestro rama master.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+* master
+
+Branching : Creando la rama feature y cambiandonos e ella
++++++++++
+Vamos a crear la rama myfeature y hacer algún trabajo sobre ella.
+
+git ckeckout -b ->>> Crea la rama que nombremos y se introduce en ela.
+
+Rama myfeature: Editamos el file humans.txt
+--------------
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git checkout -b myfeature
+Switched to a new branch 'myfeature'
+
+$ vi humans.txt
+
+$ grep All humans.txt
+ All my students
+
+$ git status
+On branch myfeature
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   humans.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git commit -am "Sayng thanks to all my students"
+[myfeature 37ae687] Satngs thanks to all my students
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+ Nos switcheamos a la Rama master
+ ++++++++++++++++++++++++++++++++
+
+$ git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+
+Realizamos algunas modificaciones en la Rama master
+---------------------------------------------------
+
+Añadimos el siguiente texto sobre el file README.md ,salvamos y cerramos
+$ grep Add README.md
+Adding some text for rebasing example
+
+
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git commit -am "Add some text to README for rebase example"
+[master b3411d5] Add some text to README for rebase example
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+
+Hechando un vistazo al histórico de commits
++++++++++++++++++++++++++++++++++++++++++++++
+
+Podemos ver que la "Rama maestra" y la "Rama myfeature" están en líneas separadas.
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git log --oneline --decorate --all --graph
+* b3411d5 (HEAD -> master) Add some text to README for rebase example
+| * 37ae687 (myfeature) Satngs thanks to all my students
+|/
+* 54b9c2e (origin/master, origin/HEAD) updating ignore file to exclude merge temp files
+
+
+Rebase
++++++++++
+
+Todavía no he terminado con el rebase en mi rama de myfeature,
+así que para hacerlo podemos usar rebase.
+
+Regresamos a la rama myfeature
+--------------------------------
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git checkout myfeature
+Switched to branch 'myfeature'
+
+Rebase a 
+
+los cambios que hemos realizado en la rama maestra y veamos cómo afectará a nuestra histórico.
+
+Introducimos el rebase commnad y vemos el histórico
+----------------------------------------------------
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (myfeature)
+$ git rebase master
+Successfully rebased and updated refs/heads/myfeature.
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (myfeature)
+
+$ git log --oneline --decorate --all --graph
+
+* bbf067e (HEAD -> myfeature) Saying thanks to all my students
+* b3411d5 (master) Add some text to README for rebase example
+
+
+Podemos ver que  el rebase command es sobreescribir nuestro HEAD
+puedes ver que tenemos la "rama master" aplicada y luego aplicamos los cambios a la "rama myfeature" 
+
+Notese que ambos commit están en la misma línea.
+
+
+In order to make that happen, we have to rewind the change that happened on the myfeature and playback the changes in master on the myfeature branch.
+
+ Para que eso suceda, tenemos que rebobinar el cambio que ocurrió en myfeature
+ y reproducir los cambios en master en la rama myfeature 
+
+And then apply the change that happened on the myfeature branch originally,
+in doing so it will be flattened our history.
+It is also going to allow us to fast-forward merge once we're done making changes on myfeature.
+
+ Y luego aplique el cambio que ocurrió en la rama myfeature originalmente,
+ al hacerlo, se aplanará nuestro historial. 
+ También nos permitirá avanzar rápidamente una vez que terminemos de hacer cambios en myfeature
+
+
+----------REALIZANDO OTRO CAMBIO----------
+
++++++++++++++++
+Rama myfeature
+++++++++++++++
+
+Sobre la "rama myfeature" hagamos otra modificación en el archivo README.md antes del merge.
+
+Vamos a editar README.md agregando algo de texto en el proyecto starter-web
+  
+  Añadimos el siguiente texto ", then more changes from myfeature branch too"
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (myfeature)
+$ vi README.md
+
+$ grep then README.md
+Adding some text for rebasing example, then more changes from myfeature branch too
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (myfeature)
+$ git status
+On branch myfeature
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (myfeature)
+$ git commit -am "Adding another change after rebase"
+[myfeature 006e6ab] Adding another change after rebase
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Miramos el histórico
+---------------------
+Entonces, si vemos el historico vemos que la "rama myfeature"
+se ha movido un par de commits por delante de la "rama maestra"
+con nuestra última confirmación en la parte superior.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (myfeature)
+$ git log --oneline --decorate --all --graph
+* 006e6ab (HEAD -> myfeature) Adding another change after rebase
+* bbf067e Satngs thanks to all my students
+* b3411d5 (master) Add some text to README for rebase example
+
+++++++++++++++
+RAMA master
+++++++++++++++++
+Así que ahora, he terminado con mi rama "rama myfeature", 
+regresemos a la rama maestra 
+y fusionemos la "rama myfeature" de nuevo con la "rama master"
+
+$ git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Viendo el README file
+----------------------
+
+Podemos notar que el README file en la rama master aún no tiene el cambio:
+    ", then more changes from myfeature branch too"
+
++++++++++++++++++++++++++++++++++++++++++++++
+Comparamos la Rama master y la Rama myfeature
++++++++++++++++++++++++++++++++++++++++++++++
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git diff master myfeature
+diff --git a/README.md b/README.md
+index 0cd9f8c..8100d2f 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,7 @@
+ # Starter Web Repo
+
+ This repository is for showing how Git and GitHub work.
+-Adding some text for rebasing example
++Adding some text for rebasing example, then more changes from myfeature branch too
+
+ ## Purpose
+
+diff --git a/humans.txt b/humans.txt
+index fc6a411..f874a73 100644
+--- a/humans.txt
++++ b/humans.txt
+@@ -7,7 +7,7 @@
+
+ # THANKS
+
+-    <name>
++    All my students
+
+Realizando el merge (Fusionando los commits)
+++++++++++++++++++++++++++++++++++++++++++++++
+
+Vemos que realizamos un "fast-forward merge"
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git merge myfeature
+Updating b3411d5..006e6ab
+Fast-forward
+ README.md  | 2 +-
+ humans.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+ Revisando el histórico
+ -----------------------
+ Una vez hecho el merge  podemos ver que la "Rama maestra" esta sincronizada con la "Rama myfeature"
+
+ $ git log --oneline --decorate --all --graph
+ * 006e6ab (HEAD -> master, myfeature) Adding another change after rebase
+ 
+
+ Elininado la rama myfeature
+ ++++++++++++++++++++++++++++
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch -d myfeature
+Deleted branch myfeature (was 006e6ab).
+
+Vemos que ya tenemos sólo la "Rama master" en nuestro repositorio local
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch
+* master
+

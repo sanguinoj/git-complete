@@ -5,11 +5,52 @@ Rama master
 ++++++++++++
 git status: Podemos ver el directorio de trabajo limpio con algunos commits por delante
 
-git branch: Listamos las ramas y vemos que sólo tenemos la rama master
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 7 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
 
 git pull origin master:  Debe hacerse antes del push y vemos que tenemos todo actualizado.
 
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git pull origin master
+From https://github.com/sanguinoj/starter-web
+ * branch            master     -> FETCH_HEAD
+Already up to date.
+
 git push origin master: Ahora hacemos el push(empujamos) los cambios hacia el directorio remoto(Github)
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git push origin master
+Enumerating objects: 25, done.
+Counting objects: 100% (25/25), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (21/21), done.
+Writing objects: 100% (21/21), 2.18 KiB | 446.00 KiB/s, done.
+Total 21 (delta 14), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (14/14), completed with 4 local objects.
+To https://github.com/sanguinoj/starter-web.git
+   54b9c2e..0869000  master -> master
+
+Nuestro "git status" nos dice que estamos al día con la rama remota"origin/ master".
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git branch -a
+  bigtrouble
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/master
 
 
 Por último nos vamos a Github:
@@ -19,3 +60,104 @@ Refrescamos el repositorio y podemos ver el último commit .gitignore
 para excluir los archivos temporales
 
 Si miras bien puedes ver todos los cambios
+
+
+OTRO EJEMPLO
++++++++++++++
+
+Editando simple.html ,guardando y cerrando
+------------------------------------------------
+
+En este ejemplo, quiero mostrar cómo reajustar los cambios entrantes de GitHub en su repositorio local.
+
+Para demostrar eso, hagamos algunos cambios primero:
+
+Voy a editar el archivo "simple.html",
+
+así que voy a editar el aviso de derechos de autor al final.
+
+Entonces, ahora voy a guardar este archivo y cerrarlo.
+
+Realizamos un express commit
+-----------------------------
+
+Ahora sigamos adelante y cometamos ese cambio; bien, entonces estoy haciendo mi compromiso expreso,
+
+que es "git commit -am", y luego el mensaje de confirmación "local:"
+
+solo para poder rastrear esto es una confirmación local versus la confirmación remota.
+
+"actualización del aviso de copyright simple.html".
+
+
+ Muy bien, eso está hecho;así que ahora volvemos a un directorio de trabajo limpio,
+
+y que estamos un commit por delante de "origen/maestro".
+
+
+Realizando cambio en Github
+----------------------------
+
+Muy bien, vayamos a GitHub, así que voy a encender mi navegador;
+
+y modifiquemos el "index.html". Y principalmente estoy haciendo esto para
+
+mostrar cómo sería esto si hubiera otro desarrollador contribuyendo
+
+en GitHub mientras trabajamos en nuestro repositorio local.
+
+Así que hice ese cambio; sigue adelante y comiteo ese cambio.
+
+Muy bien "remoto:", y luego, "cambio menor a index.html",
+
+solo para que pueda seguirle la pista. Si cometo el cambio, está bien, está ahí;
+
+así que este "remoto: cambio menor a index.html",
+
+esta es la última confirmación en el repositorio de GitHub.
+
+Si hago un "estado de git", muestra que mi rama, la maestra que es local, es una confirmación
+
+por delante de "origen / maestro". Sé que este no es el caso, así que necesito actualizar mis referencias.
+
+Entonces, para hacer eso, en lugar de usar "git pull", voy a usar "git fetch".
+
+"git fetch" es un comando no destructivo que simplemente actualiza las referencias
+
+entre el repositorio remoto y el repositorio local.
+
+Todas las referencias están actualizadas, así que estamos listos.
+
+Entonces, si hago un "estado git", "estado git" me dice que "origen / maestro"
+
+y mis ramas maestras locales han divergido.
+
+Bueno, digamos que tengo muchas ganas de seguir trabajando,
+
+pero no estoy listo para fusionar mis cambios como una fusión tradicional.
+
+Lo que prefiero hacer es mantener mis confirmaciones, mis cambios
+
+antes de lo que esté en GitHub, pero quiero el beneficio
+
+de cualquiera de los cambios que puedan haber ocurrido en GitHub.
+
+Entonces, para hacer eso, podemos emitir el comando "git pull",
+
+pero pasando un parámetro adicional para causar una rebase
+
+durante el proceso. Así que hagamos eso: "git pull --rebase origin master".
+
+Entonces este es nuestro comando estándar, excepto que ahora
+
+estamos usando la opción "--rebase" para provocar un rebase en lugar de una fusión normal.
+
+Muy bien, ahora presione enter. Genial, ahora hemos vuelto a basar
+
+nuestros cambios de GitHub en la parte superior de nuestra rama maestra
+
+en nuestro repositorio local. Entonces, si hacemos un "estado git",
+
+nuestra rama está simplemente por delante de "origen / maestro" por una confirmación.
+
+Muy bien, entonces podemos ver que tenemos "origen / maestro", y luego nuestra rama maestra.

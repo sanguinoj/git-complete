@@ -1,0 +1,114 @@
+We have learned the basic concept of Rebasing, now let us know how to set up Rebase conflict.
+
+Well, we will start off from where we had left, So I am currently in my Git repository starter-web
+And currently in Master branch, git branch.
+
+Rama master proyecto starter-web
+++++++++++++++++++++++++++++++++++
+
+Nos vamos anuestro Working directory
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ pwd
+/c/Users/jsnl/projects/starter-web
+
+Vamos a ber los archivos que tenemos dentro de este repositorio de Git:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ ls
+404.html                          crossdomain.xml  favicon.ico  hipster.txt  index.html  level1/      README.md   simple.html       tate
+apple-touch-icon-precomposed.png  css/             fonts/       humans.txt   js/         newfile.txt  robots.txt  simple.html.orig
+
+Mofificando el file simple.html
+--------------------------------------------
+Vamos a realizar algunas modificaciones sobre el archivo simple.html
+
+Vamos a añadir la siguiente línea "Adding changes before rebasing conflicts"
+a este file simple.html,guardamos y cerrams el archivo.
+
+Realizamos un commit express de la siguienye manera: git commit -am "mb before rebase conflicts"
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git commit -am "mb before rebase conflicts"   #mb es de master branch
+warning: CRLF will be replaced by LF in simple.html.
+The file will have its original line endings in your working directory
+[master 9f542e5] mb before rebase conflicts
+ 1 file changed, 1 insertion(+)
+
+
+
+Rama bigtrouble
+++++++++++++++++++++++
+
+Cramos una nueva rama(branch) called bigtrouble y nis cambiamos a ella:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git checkout -b bigtrouble
+Switched to a new branch 'bigtrouble'
+
+
+Mofificando el file simple.html
+--------------------------------
+
+Vamos a realizar algunos conflict changes,para ello editamos el file simple.html,guardamos y cerramos.
+
+Realizamos un commit express de la siguienye manera: git commit -am "fb Adding some trouble to simple.html" ,
+
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git commit -am "fb Adding some trouble to simple.html" 
+warning: CRLF will be replaced by LF in simple.html.
+The file will have its original line endings in your working directory
+[bigtrouble 2151eab] fb Adding some trouble to simple.html
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+Rama master
++++++++++++++
+
+Volvemos de nuevo a la rama master:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 4 commits.
+  (use "git push" to publish your local commits)
+
+Realizando otro cambio
+-------------------------
+De nuevo editamos el mismo archivo y realizamos algunos cambios,salvamos y salimos.
+Ahora hemos hecho algunos conflicting changes en este archivo en la rama master.
+
+
+Realizamos un commit express de la siguienye manera: git commit -am "mb conflicting changes brewing".
+
+git commit -am "mb conflicting changes brewing"
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git commit -am "mb conflicting changes brewing"
+[master 9cdbcca] mb conflicting changes brewing
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+Hacemos un git status y vemos que tenemos un working directory limpio:
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 5 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+Revisando el histórico de los commits:Viendo los commits de las ramas
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Vamos a comprobar el histórico con:  git log --oneline --graph --decorate --all
+
+Podemos ver en la parte superior que tenemos 2 commits (confirmaciones) uno en cada rama.
+Tenemos nuestra "rama bigtrouble" y nuestra "rama master" la cuál es divergente.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git log --oneline --graph --decorate --all
+* 9cdbcca (HEAD -> master) mb conflicting changes brewing
+| * 2151eab (bigtrouble) fb Adding some trouble to simple.html
+|/
+* 9f542e5 mb before rebase conflicts

@@ -1,0 +1,223 @@
+Rama bigtrouble
++++++++++++++++
+
+Muy bien, entonces vamos a continuar donde lo dejamos;
+
+por lo que actualmente estamos en el directorio de trabajo del repositorio de Git:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ pwd
+/c/Users/jsnl/projects/starter-web
+
+Si hago un "git status", puedes ver que estamos en la rama "bigtrouble",en un directorio de trabajo limpio:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git status
+On branch bigtrouble
+nothing to commit, working tree clean
+
+Revisando el histórico
+----------------------
+Si emitimos mi comando "git log" de la sesión anterior,que tiene las opciones
+"online, "graph", "decorate" y "all". Observamos que tenemos nuestras dos ramas que han divergido.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git log --oneline --graph --decorate --all
+* 9cdbcca (master) mb conflicting changes brewing
+| * 2151eab (HEAD -> bigtrouble) fb Adding some trouble to simple.html
+|/
+* 9f542e5 mb before rebase conflicts
+
+Realizando el rebase: git rebase master
++++++++++++++++++++++++++++++++++++++++
+Intentemos hacer el rebase: entonces "git rebase master",presione enter.
+Como era de esperar, nos encontramos con un conflicto,así que ahora estamos en un estado de conflicto durante el rebase.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git rebase master
+error: could not apply 2151eab... fb Adding some trouble to simple.html
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply 2151eab... fb Adding some trouble to simple.html
+Auto-merging simple.html
+CONFLICT (content): Merge conflict in simple.html
+
+merge conflict: Conflicto de fusión durante el rebase
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Así que ahora estamos en un "merge conflict"(conflicto de fusión) durante el rebase.
+
+visual merge tool: Tratando y resolviendo los conflictos del merge
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Así que voy a tratar esto como un "merge conflict" y usaré mi herramienta de fusión visual.
+
+Introduzco "git mergetool". Eso lanzará la herramienta mergetool visual que está configurada con Git;
+en mi caso es P4Merge.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble|REBASE 1/1)
+$ git mergetool
+Merging:
+simple.html
+
+Normal merge conflict for 'simple.html':
+  {local}: modified file
+  {remote}: modified file
+
+Ahora vamos a resolver nuestros conflictos.
+
+verde
+morado
+verde
+verde
+gris
+
+Una vez elegidos ,guardamos y salimos.
+
+Lanzamos un git status y vemos que tenemos nuestro archivo "simple.html" que está modificado.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble|REBASE 1/1)
+$ git status
+interactive rebase in progress; onto 9cdbcca
+Last command done (1 command done):
+   pick 2151eab fb Adding some trouble to simple.html
+No commands remaining.
+You are currently rebasing branch 'bigtrouble' on '9cdbcca'.
+  (all conflicts fixed: run "git rebase --continue")
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   simple.html
+
+Debemos "add" el archivo "simple.html" antes de poder continuar.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble|REBASE 1/1)
+$ git add simple.html
+
+Entonces, hemos solucionado todos los problemas con esta confirmación en el rebase:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble|REBASE 1/1)
+$ git status
+interactive rebase in progress; onto 9cdbcca
+Last command done (1 command done):
+   pick 2151eab fb Adding some trouble to simple.html
+No commands remaining.
+You are currently rebasing branch 'bigtrouble' on '9cdbcca'.
+  (all conflicts fixed: run "git rebase --continue")
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   simple.html
+
+git rebase --continue
++++++++++++++++++++++
+Sigamos adelante y continuemos; así que "git rebase --continue":
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble|REBASE 1/1)
+$ git rebase --continue
+[detached HEAD fcabea8] fb Adding some trouble to simple.html
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+Successfully rebased and updated refs/heads/bigtrouble.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+
+Genial, hemos resuelto el "rebase conflict"
+
+Revisando el histórico: "git log --oneline --graph --decorate --all"
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Si ejecutamos nuestro comando de registro, "git log --oneline --graph --decorate --all",
+
+podemos ver que hemos aplicado nuestro "master commit",
+
+y después nuestro "feature branch commit"
+
+$ git log --oneline --graph --decorate --all
+* fcabea8 (HEAD -> bigtrouble) fb Adding some trouble to simple.html
+* 9cdbcca (master) mb conflicting changes brewing
+
+Mofificando  el file simple.html de nuevo
+++++++++++++++++++++++++++++++++++++++++++
+
+Realizando un par de cambios en el archivo ,guardamos y salimos.
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ vi simple.html
+
+
+Realizamos un "express commit" con el siguiente mensaje "Adding changes after rebasing conflict".
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git commit -am "Adding changes after rebasing conflict"
+warning: CRLF will be replaced by LF in simple.html.
+The file will have its original line endings in your working directory
+[bigtrouble 0869000] Adding changes after rebasing conflict
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+Volvemos a tener un directorio de trabajo limpio
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git status
+On branch bigtrouble
+nothing to commit, working tree clean
+
+Revisando el histórico de nuevo
+++++++++++++++++++++++++
+Si realizamos nuestro git log command de nuevo.
+
+Ahora podemos ver que tenemmos 2 commits por delante de master,
+con nuestro último commit en la parte superior.
+
+$ git log --oneline --graph --decorate --all
+* 0869000 (HEAD -> bigtrouble) Adding changes after rebasing conflict
+* fcabea8 fb Adding some trouble to simple.html
+* 9cdbcca (master) mb conflicting changes brewing
+
+Integrando esos cambios en la rama master
+++++++++++++++++++++++++++++++++++++++++++
+así que ahora es el momento de mergear esos cambios en la "rama master"
+
+Nos cambios de rama con "git checkout master":
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (bigtrouble)
+$ git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 5 commits.
+  (use "git push" to publish your local commits)
+
+
+
+Entonces, ahora que estamos en la rama maestra, mergeamos esos cambios.
+
+Ejecutamos "git merge bigtrouble", que es el nombre de la rama:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ git merge bigtrouble
+Updating 9cdbcca..0869000
+Fast-forward
+ simple.html | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+El resultado es una Fast-forward merge, que no supone ningún problema.
+
+
+Revisando el histórico de nuevo
+++++++++++++++++++++++++++++++++
+
+Si hacemos nuestro comando "git log" nuevamente, ahora el comando git log muestra
+
+que tenemos la "rama master" y la "rama bigtrouble" apuntando al mismo commit,
+
+y que el gráfico de ramificación es muy plano. Muy bien, Hemos acabado.
+
+$ git log --oneline --graph --decorate --all
+* 0869000 (HEAD -> master, bigtrouble) Adding changes after rebasing conflict
+* fcabea8 fb Adding some trouble to simple.html
+* 9cdbcca mb conflicting changes brewing
+* 9f542e5 mb before rebase conflicts
+
+
+
+
