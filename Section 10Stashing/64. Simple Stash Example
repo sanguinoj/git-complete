@@ -1,0 +1,217 @@
+
+https://chercher.tech/git/git-stash-operation
+
+Stashing no es más que un almacenamiento temporal.
+
+El comando "git stash" almacena temporalmente:
+-los archivos modificados,
+-los untracked files (archivos sin seguimiento)
+-y los cambios por etapas
+realizados en nuestro directorio de trabajo en su pila y 
+podemos avanzar y trabajar en otra cosa y volver a la sección anterior y volver a trabajar en ella.
+
+
+Stashing
+++++++++++
+Sigamos adelante y entendamos el "stashing" con un ejemplo de la siguiente manera
+
+Rama master
+-------------
+
+Vayamos a la carpeta de mi proyecto y luego a mi repositorio de Git llamado starter-web.
+Si hacemos git status, Git nos dice que estamos en la "rama master" con un directorio de trabajo limpio.
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+    $ git status
+    On branch master
+    Your branch is up to date with 'origin/master'.
+    nothing to commit, working tree clean
+
+Revisamos la lista de archivos
+-------------------------------
+Antes de modificar algunos archivos, revisemos la lista de archivos, hagamos una ls:
+
+jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+$ ls
+404.html                          crossdomain.xml  favicon.ico  hipster.txt  index.html  level1/      README.md   simple.html       tate
+apple-touch-icon-precomposed.png  css/             fonts/       humans.txt   js/         newfile.txt  robots.txt  simple.html.orig
+
+Editando el file simple.html
+-----------------------------
+
+Editamos el archivo simple.html y actualizamos el título ,luego guardamos y salimos.
+
+$ grep Example simple.html
+     <title>Updating Title for Stash Example</title>
+
+-Realizamos un git status:
+
+Si hacemos un git status, vemos nuestro archivo modificado,
+sin embargo, aún no hemos finalizado con este archivo simple.html
+todavía está en progreso y, por lo tanto, no quiero hacer commit de este archivo en su estado actual.
+
+
+git stash
+----------
+Podemos modificar un archivo diferente para algo que tenemos que hacer ya ahora mismo.
+
+Para guardar los cambios que tengo para simple.html, 
+Vamos a usar el comando "git stash" de Git para guardar escondiendo cualquier cambio que esté en progreso.
+
+$ git stash
+Saved working directory and index state WIP on master: 089b0a1 updating simple.html copyright notice
+
+git status
+------------
+
+Comprobamos el estado de nuestro working directory con "git status":
+
+    Git nos dice que todavía estamos en la rama master con un working directory limpio 
+    y no hay archivos que estén en staged para commit o no hay nada en el stagging area de Git.
+
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+-Si abrimos el archivo simple.html vemos que el título
+ es el anterior a donde estabamos antes de editar el archivo.
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+    $ grep title simple.html
+    <title>Lots of Trouble, in a little repo</title>
+
+
+Modificando otro archivo README.md
+----------------------------------
+
+Modifiquemos el archivo README.md
+Cambiamos la sección de derechos de autor,añadiendo "All rigths reserved." luego guardamos y salimos.
+
+$ grep All README.md
+2014 Git.Training. All rigths reserved.
+
+
+-Realizamos un git status:
+
+Si hacemos un git status, vemos nuestro archivo modificado:
+    $ git status
+    On branch master
+    Your branch is up to date with 'origin/master'.
+    Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+-Realizamos un "commit express" para este cambio de la siguiente manera:
+
+    git commit -am "Quick fix in production to improve copyright notice"
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)    
+    $ git commit -am "Quick fix in production to improve copyright notice"
+    [master d6c742d] Quick fix in production to improve copyright notice
+    1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+-Realizamos un git status:
+
+Vemos que el working directory de nuevo esta limpio.
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+    $ git status
+    On branch master
+    Your branch is ahead of 'origin/master' by 1 commit.
+    (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+git stash apply
+---------------
+
+¿Que pasa con el stash que hicimos para el file simmple.html? ¿Cómo lo recuperamos?
+
+Hasta ahora hemos realizado el cambio que necesitabamos hacer sobre el archivo README.
+Este cambio era de alta prioridad.
+
+Ahora ya podemos volve a los cambios en los que estábamos trabajando antes
+, para hacerlo, debemos aplicar nuestro  stash commnad con "git stash apply"
+
+    jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+    $ git stash apply
+    On branch master
+    Your branch is ahead of 'origin/master' by 1 commit.
+    (use "git push" to publish your local commits)
+    Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git restore <file>..." to discard changes in working directory)
+            modified:   simple.html
+    no changes added to commit (use "git add" and/or "git commit -a")
+
+Este comando básicamente nos mete en el stagging area (index)
+el archivo simple.html que antes habíamos escondido con el comando git stash
+
+
+- Si abrimos el archivo simple.html
+  nos devuelve a la forma en que estaba, justo antes de que emitiéramos el comando git stash.
+
+  $ grep Example simple.html
+        <title>Updating Title for Stash Example</title>
+
+  Así que ahora, podemos retomar donde lo dejamos y continuar editando este archivo.
+  Si deseamos realizar cambios adicionale sobre este archivo, hagámoslo, luego guardamos y salimos.
+   
+   Añadimos lo siguiente:
+    $ grep more simple.html
+                   Adding more imporant content here
+
+    -Realizamos un express commit de la siguiente forma:
+         git commit -am "Done with simple.html file"
+
+         $ git commit -am "Done with simple.html file"
+        [master 0d9bfed] Done with simple.html file
+        1 file changed, 2 insertions(+), 2 deletions(-)
+
+    -Hacemos un git status y vemos que estamos en un working directory limpio:
+
+        $ git status
+        On branch master
+        Your branch is ahead of 'origin/master' by 2 commits.
+        (use "git push" to publish your local commits)
+        nothing to commit, working tree clean
+
+    -git stash list
+
+    Aún no hemos terminado. 
+    Avancemos, usemos el subcomando stash de "git stash list"
+    Podemos ver un solo elemento al que se hace referencia como {0}
+    que no es más que el punto en el que comenzamos,
+
+    WIP significa trabajo en progreso en la rama mastery la identificación de referencia.
+
+     $ git stash list
+    stash@{0}: WIP on master: 089b0a1 updating simple.html copyright notice
+
+    -git stash drop
+        Como ya hemos aplicado el stash, ya no lo necesitamos, lo que significa que podemos
+         hacer un drop del stash.
+         Podemos simplemente emitir un "git stash drop" comando y dropeará(eliminará) el último stash.
+
+            jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+            $ git stash drop
+            Dropped refs/stash@{0} (d5df1b721053440cf2c2101bb27aec5d514816f0)
+
+            jsnl@ESPC006827 MINGW64 ~/projects/starter-web (master)
+            $ git stash list
+
+
+
+
+
+
+
+
+
+
+
+

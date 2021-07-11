@@ -175,6 +175,10 @@ Your branch is ahead of 'origin/master' by 1 commit.
 
 nothing to commit, working tree clean
 
+$ git log --oneline --graph --decorate --all
+* 089b0a1 (HEAD -> master) updating simple.html copyright notice
+* 7434464 (origin/master, origin/HEAD) remote: minor change to index.html file
+
 
 
 
